@@ -17,7 +17,6 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
   cout << x[n - 1] << "]" << endl;
 
 ll r = LINF;
-ll dbf = 0;
 
 bool hasCollision(vector<vector<char>> &board, ll i, ll j) {
   ll down_i = i, up_i = i;
@@ -31,17 +30,16 @@ bool hasCollision(vector<vector<char>> &board, ll i, ll j) {
   return false;
 }
 
-ll gcount = 0;
-void putQueens(vector<vector<char>> &board, ll j_row) {
+void putQueens(vector<vector<char>> &board, ll j_row, ll *counter) {
   if (j_row == 8) {
-    gcount += 1;
+    *counter += 1;
     return;
   }
 
   for (ll i = 0; i < 8; i++) {
     if (board[i][j_row] == '.' && !hasCollision(board, i, j_row)) {
       board[i][j_row] = 'Q';
-      putQueens(board, j_row + 1);
+      putQueens(board, j_row + 1, counter);
       board[i][j_row] = '.';
     }
   }
@@ -49,13 +47,13 @@ void putQueens(vector<vector<char>> &board, ll j_row) {
 
 int main() {
   vector<vector<char>> board(8, vector<char>(8));
+  ll counter = 0;
   for (ll i = 0; i < 8; i++) {
     for (ll j = 0; j < 8; j++) {
       cin >> board[i][j];
     }
   }
-
-  putQueens(board, 0);
-  cout << gcount << endl;
+  putQueens(board, 0, &counter);
+  cout << counter << endl;
   return 0;
 }
