@@ -1,5 +1,6 @@
-#include <algorithm>
 #include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 using namespace std;
 typedef long long ll;
 const int INF = 0x3f3f3f3f;
@@ -15,34 +16,30 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
   }                                                                            \
   cout << x[n - 1] << "]" << endl;
 
+ll r = LINF;
+ll len = 0;
+void solve(vector<ll> v, ll i, ll sum1, ll sum2) {
+  if (i == len) {
+    r = min(r, abs(sum1 - sum2));
+    return;
+  }
+  solve(v, i + 1, sum1 + v[i], sum2);
+  solve(v, i + 1, sum1, sum2 + v[i]);
+  return;
+}
+
 int main() {
-  _;
   ll t;
   cin >> t;
-  while (t--) {
-    ll n;
-    cin >> n;
-    n++;
-    vector<ll> freq(n, 0);
-    vector<ll> c(n, 0);
+  vector<ll> v(t);
 
-    for (int i = 0; i < n - 1; i++) {
-      ll frog;
-      cin >> frog;
-      if (frog < n) {
-        freq[frog]++;
-      }
-    }
-
-    for (ll j = 0; j < n; j++) {
-      if (!freq[j])
-        continue;
-      for (ll k = j; k < n; k += j)
-        c[k] += freq[j];
-    }
-
-    cout << *max_element(c.begin(), c.end()) << endl;
+  for (int i = 0; i < t; i++) {
+    cin >> v[i];
   }
+  len = v.size();
+
+  solve(v, 0, 0, 0);
+  cout << r << endl;
 
   return 0;
 }

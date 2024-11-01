@@ -1,7 +1,8 @@
-#include <algorithm>
 #include <bits/stdc++.h>
+#include <utility>
 using namespace std;
 typedef long long ll;
+typedef unsigned long long ull;
 const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 #define _                                                                      \
@@ -16,33 +17,42 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
   cout << x[n - 1] << "]" << endl;
 
 int main() {
-  _;
-  ll t;
-  cin >> t;
-  while (t--) {
-    ll n;
-    cin >> n;
-    n++;
-    vector<ll> freq(n, 0);
-    vector<ll> c(n, 0);
+  _ string N;
+  cin >> N;
+  ll K;
+  cin >> K;
 
-    for (int i = 0; i < n - 1; i++) {
-      ll frog;
-      cin >> frog;
-      if (frog < n) {
-        freq[frog]++;
+  for (ull i = 0; i < N.size() && !K; i++) {
+    ll max_idx = i;
+    bool swapped = false;
+    ll repeatCount = 1;
+    for (ll j = i + 1; j < N.size(); j++) {
+      if (N[j] == N[max_idx]) {
+        repeatCount++;
+      }
+
+      if (N[j] > N[max_idx]) {
+        swapped = true;
+        max_idx = j;
+        repeatCount = 0;
       }
     }
 
-    for (ll j = 0; j < n; j++) {
-      if (!freq[j])
-        continue;
-      for (ll k = j; k < n; k += j)
-        c[k] += freq[j];
+    vector<ll> slice;
+    ll k = i;
+    while (k < K + i) {
+      if (N[k] < N[max_idx]) {
+        k++;
+      }
+      slice.push_back(N[k]);
     }
-
-    cout << *max_element(c.begin(), c.end()) << endl;
+    if (swapped) {
+      swap(N[i], N[max_idx]);
+      K--;
+    }
   }
+
+  cout << N << endl;
 
   return 0;
 }
